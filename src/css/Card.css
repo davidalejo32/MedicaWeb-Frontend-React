@@ -1,0 +1,102 @@
+/* card */
+
+.card{
+  width: 100%;
+  max-width: 400px;
+  justify-self: center;
+  padding: 2rem;
+  background-color: var(--primary-text-color);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
+
+}
+
+.card__header{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 27% 73%;
+  gap: 1rem;
+  align-items: center;
+}
+
+.card__img{
+  width: 80px;
+  height: 80px;
+  background-color: #D9D9D9;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+
+.card__name{
+  color: var(--secondary-text-color);
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  /* margin-top: 1rem; */
+}
+
+.card__data{
+  margin-top: 1.5rem;
+  font-size: 1.7rem;
+  opacity: 65%;
+  text-transform: capitalize;
+}
+
+.card__body{
+  width: 100%;
+  margin-top: 2rem;
+}
+
+
+.card__first{
+  font-size: 1.8rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.card__first-text{
+  color: var(--secondary-color);
+  margin-top: .5rem;
+  text-transform: capitalize;
+}
+
+.card__second-container{
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+
+.card__second{
+  font-size: 1.8rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.card__second-text{
+  color: var(--secondary-color);
+  margin-top: .5rem;
+  text-transform: capitalize;
+}
+
+.card__tipe-container{
+  color: var(--primary-color);
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.data__container {
+  
+  width: 80%;
+  margin: 12rem auto 0 auto;
+  
+}
+.data__text {
+  width: 100%;
+  text-align: center;
+  color: var(--secondary-text-color);
+  font-size: 2.5rem;
+}
