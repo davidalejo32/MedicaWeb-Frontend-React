@@ -89,6 +89,18 @@ export default function Home() {
     }
   };
 
+  const usersData = users.map((user) => ({
+    name: `${user.name} ${user.lastName}`,
+    data: user.birthDate,
+    firts: user.idNumber,
+    firtsText: "numero de cedula",
+    second: user.phoneNumber,
+    secondText: "numero de contacto",
+    type: "paciente",
+  }));
+
+  
+
   return (
     <>
       <header>
@@ -100,7 +112,8 @@ export default function Home() {
           description="¡Bienvenido a MedicaWeb! La plataforma en línea que te conecta con los mejores 
           médicos y especialistas. A continuación, te presentamos el listado de pacientes 
           registrados en nuestra plataforma"
-          users={users}
+          users={usersData}
+ 
         />
 
         <SectionForm
@@ -149,6 +162,7 @@ export default function Home() {
               value={formValues.phoneNumber}
             />,
           ]}
+          buttonText="registrar"
           onSubmit={handleSubmit}
           showError={showError}
         />

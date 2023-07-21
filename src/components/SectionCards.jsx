@@ -3,7 +3,6 @@ import "../css/SectionCard.css";
 
 export default function SectionCards(props) {
   const { description, users } = props;
-  
   return (
     <section className="section__cards-container">
       <div className="section__cards-color">
@@ -16,13 +15,7 @@ export default function SectionCards(props) {
           {users.map((user, index)=>(
             <Card 
               key={index}
-              name={`${user.name} ${user.lastName}`}
-              data={user.birthDate}
-              firts={user.idNumber}
-              firtsText="numero de cedula"
-              second={user.phoneNumber}
-              secondText="numero de contacto"
-              type="paciente"
+              data={user}
             />
           ))}
           

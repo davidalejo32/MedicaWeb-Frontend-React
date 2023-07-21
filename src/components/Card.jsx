@@ -1,27 +1,29 @@
 import "../css/Card.css";
 export default function Card(props) {
+
+  const { data } = props
   return (
     <>
       <div className="card">
         <div className="card__header">
           <img className="card__img" />
           <div className="card__name-container">
-            <p className="card__name">{props.name}</p>
-            <p className="card__data">{props.data}</p>
+            <p className="card__name">{data.name}</p>
+            <p className="card__data">{data.data}</p>
           </div>
         </div>
         <div className="card__body">
           <div className="card__first-container">
-            <p className="card__first">{props.firts}</p>
-            <p className="card__first-text">{props.firtsText}</p>
+            <p className="card__first">{data.firts}</p>
+            <p className="card__first-text">{data.firtsText}</p>
           </div>
           <div className="card__second-container">
             <div className="card__second-left">
-              <p className="card__second">{props.second}</p>
-              <p className="card__second-text">{props.secondText}</p>
+              <p className="card__second">{data.second}</p>
+              <p className="card__second-text">{data.secondText}</p>
             </div>
             <div className="card__tipe-container">
-              <p className="card__tipe-text">{props.type}</p>
+              <p className="card__tipe-text">{data.type}</p>
             </div>
           </div>
         </div>
@@ -29,6 +31,8 @@ export default function Card(props) {
     </>
   );
 }
+
+
 
 // props.name
 // props.data

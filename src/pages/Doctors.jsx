@@ -2,28 +2,35 @@ import Nav from "../components/Nav";
 import SectionCards from "../components/SectionCards";
 import SectionForm from "../components/SectionForm";
 import InputComponent from "../components/InputComponent";
+import InputSelect from "../components/InputSelect";
 import { useState, useEffect } from "react";
-import { createUser, getUser } from "../api/user";
+import { getSpecialty } from "../api/specialty";
+import { createDoctor, getDoctors } from "../api/doctor";
 
 export default function Doctors() {
   const [formValues, setFormValues] = useState({
     name: "",
     lastName: "",
-    idNumber: "",
-    birthDate: "",
-    phoneNumber: "",
+    office: "",
+    email: "",
+    specialty: {
+      id: ""
+    },
   });
+
 
   const [showError, setShowError] = useState(false);
 
-  const [users, setUsers] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const [specialty, setSpecialty] = useState([]);
+  const [selectedSpecialtyId, setSelectedSpecialtyId] = useState("");
 
   useEffect(() => {
     // Llamada a la API para obtener la lista de usuarios
     const fetchUsers = async () => {
       try {
-        const response = await getUser(); // Debes implementar la función getUsers para hacer la petición a la API y obtener la lista de usuarios
-        setUsers(response.data._embedded.users); // Asigna la lista de usuarios a la variable de estado users
+        const response = await getDoctors(); // Debes implementar la función getUsers para hacer la petición a la API y obtener la lista de usuarios
+        setDoctors(response.data); // Asigna la lista de usuarios a la variable de estado users
       } catch (error) {
         console.log(error);
       }
@@ -31,6 +38,21 @@ export default function Doctors() {
 
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    // Llamada a la API para obtener la lista de especialidades
+    const fetchSpecialties = async () => {
+      try {
+        const response = await getSpecialty(); // Debes implementar la función getSpecialty para hacer la petición a la API y obtener la lista de especialidades
+        setSpecialty(response.data._embedded.specialties); // Asigna la lista de especialidades a la variable de estado specialty
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchSpecialties();
+  }, []);
+
 
   const handleSubmit = async () => {
     // Realizar la validación para verificar que no hay campos vacíos
@@ -42,24 +64,25 @@ export default function Doctors() {
       setShowError(false);
 
       try {
-        const sendUser = await createUser(formValues);
+        const sendDoctor = await createDoctor(formValues);
 
-        if (sendUser.status === 200 || sendUser.status === 201) {
+        if (sendDoctor.status === 200 || sendDoctor.status === 201) {
           console.log("¡Usuario creado exitosamente!");
           // Limpiar los datos de los inputs
           setFormValues({
             name: "",
             lastName: "",
-            idNumber: "",
-            birthDate: "",
-            phoneNumber: "",
+            office: "",
+            email: "",
+            specialty: {
+              id: ""
+            },
           });
 
-          const response = await getUser();
-          setUsers(response.data._embedded.users);
-          
-        } else if (sendUser.status === 409) {
-          console.log(sendUser.data);
+          const response = await getDoctors();
+          setDoctors(response.data);
+        } else if (sendDoctor.status === 409) {
+          console.log(sendDoctor.data);
         } else {
           console.log("Hubo un error en el servidor.");
         }
@@ -73,21 +96,39 @@ export default function Doctors() {
 
   const handleInputChange = (event) => {
     const { name, value, type } = event.target;
-
-    // Validar tipos de datos
+  
     if (type === "number") {
       // Verificar que el valor ingresado sea un número
       if (!isNaN(value)) {
         setFormValues({ ...formValues, [name]: value });
       }
-    } else if (type === "text") {
-      // Verificar que el valor ingresado sea una cadena de texto
+    } else if (type === "text" || type === "email") {
+      // Verificar que el valor ingresado sea una cadena de texto o un email válido
       setFormValues({ ...formValues, [name]: value });
     } else if (type === "date") {
-      // No es necesario validar el tipo de dato para 'date', ya que el input de tipo 'date' solo permite fechas válidas.
       setFormValues({ ...formValues, [name]: value });
+    } else if (type === "select-one") {
+      setFormValues({
+        ...formValues,
+        specialty: {
+          id: value,
+        },
+      });
+      setSelectedSpecialtyId(value);
     }
   };
+  
+
+  const doctorsData = doctors.map((doctor) => ({
+    name: `${doctor.name} ${doctor.lastName}`,
+    data: `Consultorio: ${doctor.office}`,
+    firts: doctor.specialty.name,
+    firtsText: "especialidad",
+    second: doctor.email,
+    secondText: "correo electronico",
+    type: "doctor",
+  }));
+
 
   return (
     <>
@@ -97,16 +138,16 @@ export default function Doctors() {
 
       <main>
         <SectionCards
-          description="¡Bienvenido a MedicaWeb! La plataforma en línea que te conecta con los mejores 
-          médicos y especialistas. A continuación, te presentamos el listado de pacientes 
-          registrados en nuestra plataforma"
-          users={users}
+          description="Conoce a nuestros especialistas en salud: aquí encontrarás información detallada 
+          sobre nuestros médicos y sus áreas de expertise, para que puedas elegir al 
+          profesional que mejor se adapte a tus necesidades médicas."
+          users={doctorsData}
         />
 
         <SectionForm
-          description="En MedicaWeb, nos enfocamos en simplificar la gestión los pacientes.
-          Regístralos fácilmente y accede a su información cuando lo necesites.
-          ¡Comienza hoy mismo y lleva un control eficiente!"
+          description="Únete a nuestro equipo de profesionales de la salud: completa el formulario para 
+          registrarte como médico en nuestra plataforma y estar disponible para nuestros 
+          pacientes"
           inputComponents={[
             <InputComponent
               type="text"
@@ -126,29 +167,32 @@ export default function Doctors() {
             />,
             <InputComponent
               type="number"
-              textLabel="numero de cedula"
-              id="idNumber"
-              name="idNumber"
+              textLabel="Consultorio"
+              id="office"
+              name="office"
               onChange={handleInputChange}
-              value={formValues.idNumber}
+              value={formValues.office}
             />,
             <InputComponent
-              type="date"
-              textLabel="fecha de nacimiento"
-              id="birthDate"
-              name="birthDate"
+              type="email"
+              textLabel="Correo Electronico"
+              id="email"
+              name="email"
               onChange={handleInputChange}
-              value={formValues.birthDate}
-            />,
-            <InputComponent
-              type="number"
-              textLabel="numero de contacto"
-              id="phoneNumber"
-              name="phoneNumber"
-              onChange={handleInputChange}
-              value={formValues.phoneNumber}
+              value={formValues.email}
             />,
           ]}
+          inputSelectComponent={[
+            <InputSelect
+              textLabel="especialidades"
+              id="especialidades"
+              options={specialty}
+              onChange={handleInputChange}
+              value={selectedSpecialtyId}
+              name="specialty"
+            />,
+          ]}
+          buttonText="registrar"
           onSubmit={handleSubmit}
           showError={showError}
         />

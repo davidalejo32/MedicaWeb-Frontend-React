@@ -52,7 +52,7 @@
 .card__first{
   font-size: 1.8rem;
   font-weight: 500;
-  /* text-transform: capitalize; */
+  text-transform: capitalize;
 }
 
 .card__first-text{

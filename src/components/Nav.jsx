@@ -31,7 +31,6 @@ export default function Nav () {
         <ul className="nav__links">
           <li className={path === '/' ? "selected" : ""} ><Link to="/" className="nav__link" >Pacientes</Link></li>
           <li className={path === '/doctores' ? "selected" : ""}><Link to="/doctores" className="nav__link">Doctores</Link></li>
-          <li className={path === '/citas' ? "selected" : ""} ><Link to="/citas" className="nav__link">Citas</Link></li>
           <li className={path === '/especialidades' ? "selected" : ""} ><Link to="/especialidades" className="nav__link">Especialidades</Link></li>
         </ul>
       </div>
